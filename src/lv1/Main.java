@@ -35,12 +35,6 @@ public class Main {
                     break;
                 try {
                     b = Integer.parseInt(second);
-                    if(op == '/'){
-                        result = a / b;
-                        System.out.println("result = " + result);
-                        position = 0;
-                        continue;
-                    }
                     position = 2;
                 } catch (NumberFormatException e) {
                     System.out.println("양의 정수를 입력해 주세요");
@@ -75,9 +69,8 @@ public class Main {
                         try{
                             result = a / b;
                         } catch (ArithmeticException e){
-                            System.out.println("0으로 나누는 것은 불가능합니다");
-                            System.out.println("두번째 수를 다시 입력해주세요");
-                            position = 1;
+                            System.out.println("0으로는 나눌 수 없습니다");
+                            position = 0;
                             continue;
                         }
                         break;

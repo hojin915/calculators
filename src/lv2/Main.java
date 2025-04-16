@@ -17,6 +17,7 @@ public class Main {
                 if(temp1.equals("exit")) break;
                 try {
                     a = Integer.parseInt(temp1);
+                    cal.setFirst(a);
                     position = 1;
                 } catch (NumberFormatException e) {
                     System.out.println("0 이상의 정수를 입력해 주세요");
@@ -29,6 +30,7 @@ public class Main {
                 if(temp2.equals("exit")) break;
                 try {
                     b = Integer.parseInt(temp2);
+                    cal.setSecond(b);
                     position = 2;
                 } catch (NumberFormatException e) {
                     System.out.println("0 이상의 정수를 입력해 주세요");
@@ -39,17 +41,23 @@ public class Main {
                 System.out.println("사칙연산(+, -, *, /) 중 하나를 입력해 주세요");
                 String temp3 = sc.nextLine();
                 if(temp3.equals("exit")) break;
-                if(temp3.length() == 0) {
+                if(temp3.length() != 1) {
                     System.out.println("+, -, *, / 중 하나를 입력해 주세요");
                     continue;
                 }
                 op = temp3.charAt(0);
+                cal.setOp(op);
             }
-            cal.first = a;
-            cal.second = b;
-            cal.op = op;
-            result = cal.calculate();
-            System.out.println("result = " + result);
+            try {
+                result = cal.calculate();
+                System.out.println("result = " + result);
+            } catch (ArithmeticException e) {
+                System.out.println("0으로는 나눌 수 없습니다");
+            } catch (ArrayIndexOutOfBoundsException e) {
+                cal.dequeue();
+                result = cal.calculate();
+                System.out.println("result = " + result);
+            }
             position = 0;
         }
     }
