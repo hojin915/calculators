@@ -51,12 +51,11 @@ public class Main {
             try {
                 result = cal.calculate();
                 System.out.println("result = " + result);
+                System.out.println("cal.getResult() = " + cal.getResult());
+                cal.printResult();
+                cal.deleteResult();
             } catch (ArithmeticException e) {
                 System.out.println("0으로는 나눌 수 없습니다");
-            } catch (ArrayIndexOutOfBoundsException e) {
-                cal.dequeue();
-                result = cal.calculate();
-                System.out.println("result = " + result);
             }
             position = 0;
         }
