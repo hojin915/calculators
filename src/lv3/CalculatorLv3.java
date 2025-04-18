@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 
-public class CalculatorLv3 {
+// 제너릭 사용(숫자만)
+public class CalculatorLv3 <T extends Number, S extends Number> {
     public enum Operator {
         ADD("+"), SUBTRACT("-"), MULTIPLY("*"), DIVIDE("/");
 
@@ -38,14 +39,13 @@ public class CalculatorLv3 {
         }
     }
 
-    private List<Integer> result = new ArrayList<>();
+    private List<Number> result = new ArrayList<>();
     private int index = 0;
-    private int first = 0;
-    private int second = 0;
+    private T first;
+    private S second;
     private char op = ' ';
 
-
-    public int calculate() {
+    public Number calculate() {
         switch (Operator.getOperator(this.op)) {
             case ADD:
                 return calAdd(this.first, this.second);
@@ -54,7 +54,7 @@ public class CalculatorLv3 {
             case MULTIPLY:
                 return calMultiply(this.first, this.second);
             case DIVIDE:
-                if (this.second == 0) {
+                if (this.second.intValue() == 0) {
                     throw new ArithmeticException();
                 }
                 return calDivide(this.first, this.second);
@@ -63,39 +63,61 @@ public class CalculatorLv3 {
         }
     }
 
-    public int calAdd(int a, int b) {
-        int temp = a + b;
-        result.add(temp);
+    public Number calAdd(T a, S b) {
+        Number ret;
+        if(a instanceof Integer && b instanceof Integer) {
+            ret = a.intValue() + b.intValue();
+            result.add(ret.intValue());
+        }
+        else {
+            ret = a.doubleValue() + b.doubleValue();
+            result.add(ret.doubleValue());
+        }
         this.index++;
-        return temp;
+        return ret;
     }
 
-    public int calSubtract(int a, int b) {
-        int temp = a - b;
-        result.add(temp);
+    public Number calSubtract(T a, S b) {
+        Number ret;
+        if(a instanceof Integer && b instanceof Integer) {
+            ret = a.intValue() - b.intValue();
+            result.add(ret.intValue());
+        }
+        else {
+            ret = a.doubleValue() - b.doubleValue();
+            result.add(ret.doubleValue());
+        }
         this.index++;
-        return temp;
+        return ret;
     }
 
-    public int calMultiply(int a, int b) {
-        int temp = a * b;
-        result.add(temp);
+    public Number calMultiply(T a, S b) {
+        Number ret;
+        if(a instanceof Integer && b instanceof Integer) {
+            ret = a.intValue() * b.intValue();
+            result.add(ret.intValue());
+        }
+        else {
+            ret = a.doubleValue() * b.doubleValue();
+            result.add(ret.doubleValue());
+        }
         this.index++;
-        return temp;
+        return ret;
     }
 
-    public int calDivide(int a, int b) throws ArithmeticException {
-        int temp = a / b;
-        result.add(temp);
+    public Number calDivide(T a, S b) throws ArithmeticException {
+        Number ret;
+        ret = a.doubleValue() / b.doubleValue();
+        result.add(ret.doubleValue());
         this.index++;
-        return temp;
+        return ret;
     }
 
-    public void setFirst(int first) {
+    public void setFirst(T first) {
         this.first = first;
     }
 
-    public void setSecond(int second) {
+    public void setSecond(S second) {
         this.second = second;
     }
 
@@ -103,11 +125,11 @@ public class CalculatorLv3 {
         this.op = op;
     }
 
-    public int getFirst() {
+    public T getFirst() {
         return this.first;
     }
 
-    public int getSecond() {
+    public S getSecond() {
         return this.second;
     }
 
@@ -115,7 +137,7 @@ public class CalculatorLv3 {
         return this.op;
     }
 
-    public int getResult() {
+    public Number getResult() {
         return result.get(this.index - 1);
     }
 
