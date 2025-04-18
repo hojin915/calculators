@@ -9,7 +9,7 @@ public class Main {
         int a = 0;
         int b = 0;
         Scanner sc = new Scanner(System.in);
-        Calculator cal = new Calculator();
+        CalculatorLv1 cal = new CalculatorLv1();
         while (true) {
             int result = 0;
             if (position == 0) {

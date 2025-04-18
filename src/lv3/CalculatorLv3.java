@@ -1,9 +1,43 @@
-package lv2;
+package lv3;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 
-public class Calculator {
+public class CalculatorLv3 {
+    public enum Operator {
+        ADD("+"), SUBTRACT("-"), MULTIPLY("*"), DIVIDE("/");
+
+        private final String symbol;
+
+        Operator(String symbol) {
+            this.symbol = symbol;
+        }
+
+        public String getSymbol() {
+            return this.symbol;
+        }
+
+        public static Operator getOperator(char symbol) {
+            Operator result = null;
+            // Operator.values() == enum Operator 요소들의 배열
+            // symbol은 속성이기 때문에 여기에 포함되지 않는다
+            for (Operator op : Operator.values()){
+                if (op.getSymbol().charAt(0) == symbol){
+                    result = op;
+                    break;
+                }
+            }
+            if(result == null) {
+                // 프로그램 실행을 멈추지 않을 때
+                System.out.println("Not supported operator");
+                // exception을 생성할 때
+                // throw new IllegalArgumentException("Not supported operator");
+            }
+            return result;
+        }
+    }
+
     private List<Integer> result = new ArrayList<>();
     private int index = 0;
     private int first = 0;
@@ -12,14 +46,14 @@ public class Calculator {
 
 
     public int calculate() {
-        switch (this.op) {
-            case '+':
+        switch (Operator.getOperator(this.op)) {
+            case ADD:
                 return calAdd(this.first, this.second);
-            case '-':
+            case SUBTRACT:
                 return calSubtract(this.first, this.second);
-            case '*':
+            case MULTIPLY:
                 return calMultiply(this.first, this.second);
-            case '/':
+            case DIVIDE:
                 if (this.second == 0) {
                     throw new ArithmeticException();
                 }

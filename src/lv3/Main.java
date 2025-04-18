@@ -1,11 +1,11 @@
-package lv2;
+package lv3;
 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        CalculatorLv2 cal = new CalculatorLv2();
+        CalculatorLv3 cal = new CalculatorLv3();
         int a = 0, b = 0;
         int position = 0;
         char op = ' ';
@@ -51,9 +51,6 @@ public class Main {
             try {
                 result = cal.calculate();
                 System.out.println("result = " + result);
-                System.out.println("cal.getResult() = " + cal.getResult());
-                cal.printResult();
-                cal.deleteResult();
             } catch (ArithmeticException e) {
                 System.out.println("0으로는 나눌 수 없습니다");
             }

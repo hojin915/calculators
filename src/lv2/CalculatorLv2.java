@@ -1,9 +1,9 @@
-package lv1;
+package lv2;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Calculator {
+public class CalculatorLv2 {
     private List<Integer> result = new ArrayList<>();
     private int index = 0;
     private int first = 0;
@@ -21,7 +21,7 @@ public class Calculator {
                 return calMultiply(this.first, this.second);
             case '/':
                 if (this.second == 0) {
-                    throw new ArithmeticException("0으로 나누기");
+                    throw new ArithmeticException();
                 }
                 return calDivide(this.first, this.second);
             default:
