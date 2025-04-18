@@ -146,6 +146,10 @@ public class CalculatorLv3 <T extends Number, S extends Number> {
         this.index--;
     }
 
+    public List<Number> getResultList() {
+        return this.result;
+    }
+
     public void printResult() {
         System.out.println(result);
     }
