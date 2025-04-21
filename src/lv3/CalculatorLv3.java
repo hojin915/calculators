@@ -1,11 +1,12 @@
 package lv3;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 
-// 제너릭 사용(숫자만)
-public class CalculatorLv3 <T extends Number, S extends Number> {
+// 제너릭 사용(숫자만) -> 클래스 제너릭 제거
+public class CalculatorLv3 {
+    private List<Number> result = new ArrayList<>();
+    private int index = 0;
     public enum Operator {
         ADD("+"), SUBTRACT("-"), MULTIPLY("*"), DIVIDE("/");
 
@@ -23,13 +24,13 @@ public class CalculatorLv3 <T extends Number, S extends Number> {
             Operator result = null;
             // Operator.values() == enum Operator 요소들의 배열
             // symbol은 속성이기 때문에 여기에 포함되지 않는다
-            for (Operator op : Operator.values()){
-                if (op.getSymbol().charAt(0) == symbol){
+            for (Operator op : Operator.values()) {
+                if (op.getSymbol().charAt(0) == symbol) {
                     result = op;
                     break;
                 }
             }
-            if(result == null) {
+            if (result == null) {
                 // 프로그램 실행을 멈추지 않을 때
                 System.out.println("Not supported operator");
                 // exception을 생성할 때
@@ -39,117 +40,95 @@ public class CalculatorLv3 <T extends Number, S extends Number> {
         }
     }
 
-    private List<Number> result = new ArrayList<>();
-    private int index = 0;
-    private T first;
-    private S second;
-    private char op = ' ';
-
-    public Number calculate() {
-        switch (Operator.getOperator(this.op)) {
+    public <T extends Number, S extends Number> Number calculate(T first, S second, char op) {
+        Number ret;
+        switch (Operator.getOperator(op)) {
             case ADD:
-                return calAdd(this.first, this.second);
+                if (first instanceof Integer && second instanceof Integer) {
+                    ret = first.intValue() + second.intValue();
+                    result.add((Integer) ret);
+                } else {
+                    ret = first.doubleValue() + second.doubleValue();
+                    result.add((Double) ret);
+                }
+                this.index++;
+                return ret;
             case SUBTRACT:
-                return calSubtract(this.first, this.second);
+                if (first instanceof Integer && second instanceof Integer) {
+                    ret = first.intValue() - second.intValue();
+                    result.add(ret.intValue());
+                } else {
+                    ret = first.doubleValue() - second.doubleValue();
+                    result.add(ret.doubleValue());
+                }
+                this.index++;
+                return ret;
             case MULTIPLY:
-                return calMultiply(this.first, this.second);
+                if (first instanceof Integer && second instanceof Integer) {
+                    ret = first.intValue() * second.intValue();
+                    result.add(ret.intValue());
+                } else {
+                    ret = first.doubleValue() * second.doubleValue();
+                    result.add(ret.doubleValue());
+                }
+                this.index++;
+                return ret;
             case DIVIDE:
-                if (this.second.intValue() == 0) {
+                /* 0으로 나누면 예외처리
+                if (second.intValue() == 0) {
                     throw new ArithmeticException();
                 }
-                return calDivide(this.first, this.second);
+                ret = first.doubleValue() / second.doubleValue();
+                result.add(ret.doubleValue());
+                this.index++;
+                return ret;*/
+                // 예외처리 없이 코드 진행
+                if (first instanceof Integer && second instanceof Integer) {
+                    try{
+                        ret = first.intValue() / second.intValue();
+                        result.add(ret.doubleValue());
+                        this.index++;
+                        return ret;
+                    } catch (ArithmeticException e) {
+                        System.out.println("divided by zero");
+                        return null;
+                    }
+                }
+                // Double이 들어간 나눗셈에서 0으로 나누면 exception 대신
+                // Infinity, Nan이 결과로 나오기 때문에 따로 처리
+                else {
+                    ret = first.doubleValue() / second.doubleValue();
+                    if(Double.isInfinite(ret.doubleValue()) || Double.isNaN(ret.doubleValue())) {
+                        System.out.println("divided by zero");
+                        return null;
+                    }
+                }
             default:
                 return 0;
         }
     }
 
-    public Number calAdd(T a, S b) {
-        Number ret;
-        if(a instanceof Integer && b instanceof Integer) {
-            ret = a.intValue() + b.intValue();
-            result.add(ret.intValue());
-        }
-        else {
-            ret = a.doubleValue() + b.doubleValue();
-            result.add(ret.doubleValue());
-        }
-        this.index++;
-        return ret;
-    }
-
-    public Number calSubtract(T a, S b) {
-        Number ret;
-        if(a instanceof Integer && b instanceof Integer) {
-            ret = a.intValue() - b.intValue();
-            result.add(ret.intValue());
-        }
-        else {
-            ret = a.doubleValue() - b.doubleValue();
-            result.add(ret.doubleValue());
-        }
-        this.index++;
-        return ret;
-    }
-
-    public Number calMultiply(T a, S b) {
-        Number ret;
-        if(a instanceof Integer && b instanceof Integer) {
-            ret = a.intValue() * b.intValue();
-            result.add(ret.intValue());
-        }
-        else {
-            ret = a.doubleValue() * b.doubleValue();
-            result.add(ret.doubleValue());
-        }
-        this.index++;
-        return ret;
-    }
-
-    public Number calDivide(T a, S b) throws ArithmeticException {
-        Number ret;
-        ret = a.doubleValue() / b.doubleValue();
-        result.add(ret.doubleValue());
-        this.index++;
-        return ret;
-    }
-
-    public void setFirst(T first) {
-        this.first = first;
-    }
-
-    public void setSecond(S second) {
-        this.second = second;
-    }
-
-    public void setOp(char op) {
-        this.op = op;
-    }
-
-    public T getFirst() {
-        return this.first;
-    }
-
-    public S getSecond() {
-        return this.second;
-    }
-
-    public char getOp() {
-        return this.op;
-    }
-
+    // 가장 최근의 결과값 리턴
     public Number getResult() {
         return result.get(this.index - 1);
     }
 
+    // 가장 오래된 결과값 제거
     public void deleteResult() {
-        result.remove(0);
-        this.index--;
+        if (result.isEmpty()) {
+            System.out.println("Result is empty");
+        } else {
+            result.remove(0);
+            this.index--;
+        }
     }
 
+    // 결과값 전체 리턴
     public List<Number> getResultList() {
         return this.result;
     }
 
+    // 결과값 전체 출력
     public void printResult() {
         System.out.println(result);
     }

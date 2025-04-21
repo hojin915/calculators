@@ -8,12 +8,14 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         CalculatorLv3 cal = new CalculatorLv3();
-        Number a, b;
+        Number a = 0, b = 0;
         int position = 0;
-        char op;
+        char op = ' ';
         Number result;
         Double[] std = {0.0};
         while (true) {
+            // 도중에 input에 문제가 생겨도 처음으로 돌아오지 않도록
+            // 각 단계별로 position값을 정해줌
             if (position == 0) {
                 System.out.println("첫번째 숫자를 입력해 주세요");
                 String temp1 = sc.nextLine();
@@ -22,12 +24,10 @@ public class Main {
                 // 실수로 받기 실패하면 다시 입력
                 try {
                     a = Integer.parseInt(temp1);
-                    cal.setFirst(a);
                     position = 1;
                 } catch (NumberFormatException e1) {
                     try {
                         a = Double.parseDouble(temp1);
-                        cal.setFirst(a);
                         position = 1;
                     } catch (NumberFormatException e2) {
                         System.out.println("숫자를 입력해 주세요");
@@ -41,12 +41,10 @@ public class Main {
                 if (temp2.equals("exit")) break;
                 try {
                     b = Integer.parseInt(temp2);
-                    cal.setSecond(b);
                     position = 2;
                 } catch (NumberFormatException e1) {
                     try {
                         b = Double.parseDouble(temp2);
-                        cal.setSecond(b);
                         position = 2;
                     } catch (NumberFormatException e2) {
                         System.out.println("숫자를 입력해 주세요");
@@ -63,9 +61,8 @@ public class Main {
                     continue;
                 }
                 op = temp3.charAt(0);
-                cal.setOp(op);
             }
-            result = cal.calculate();
+            result = cal.calculate(a, b, op);
             try {
                 System.out.println("result = " + (Integer) result);
                 cal.printResult();
@@ -102,7 +99,7 @@ public class Main {
             List<Number> resultList = (List<Number>) cal.getResultList().stream()
                     .filter(num -> ((Number) num).doubleValue() > std[0])
                     .collect(Collectors.toList());
-            System.out.println("biggerResultList = " + resultList);
+            System.out.println(std[0] + " 보다 큰 값들은 " + resultList);
 
             position = 0;
         }
