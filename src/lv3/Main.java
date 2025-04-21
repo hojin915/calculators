@@ -16,6 +16,7 @@ public class Main {
         while (true) {
             // 도중에 input에 문제가 생겨도 처음으로 돌아오지 않도록
             // 각 단계별로 position값을 정해줌
+            // 첫번째 숫자 input
             if (position == 0) {
                 System.out.println("첫번째 숫자를 입력해 주세요");
                 String temp1 = sc.nextLine();
@@ -35,6 +36,7 @@ public class Main {
                     }
                 }
             }
+            // 두번째 숫자 input
             if (position == 1) {
                 System.out.println("두번째 숫자를 입력해 주세요");
                 String temp2 = sc.nextLine();
@@ -52,6 +54,7 @@ public class Main {
                     }
                 }
             }
+            // Operator input
             if (position == 2) {
                 System.out.println("사칙연산(+, -, *, /) 중 하나를 입력해 주세요");
                 String temp3 = sc.nextLine();
@@ -62,6 +65,7 @@ public class Main {
                 }
                 op = temp3.charAt(0);
             }
+            // calculate 메서드 사용 및 결과 출력
             result = cal.calculate(a, b, op);
             try {
                 System.out.println("result = " + (Integer) result);
@@ -75,6 +79,7 @@ public class Main {
                 System.out.println("0으로는 나눌 수 없습니다");
                 continue;
             }
+            // 숫자 입력, 입력값보다 큰 숫자 필터링
             if (position == 3) {
                 System.out.println("숫자를 입력하면 더 높았던 결과를 출력합니다");
                 String temp4 = sc.nextLine();
@@ -96,11 +101,12 @@ public class Main {
             // 배열, 커스텀 래퍼 클래스로 우회 가능하다
             // (아마도) 참조형에 담아서 사용하면 주소를 지정하기 때문에
             // 주소는 그대로인 채로 값을 변경하여 사용할 수 있는 것 같다
-            List<Number> resultList = (List<Number>) cal.getResultList().stream()
-                    .filter(num -> ((Number) num).doubleValue() > std[0])
+            List<Number> resultList = cal.getResultList().stream()
+                    .filter(num -> num.doubleValue() > std[0])
                     .collect(Collectors.toList());
             System.out.println(std[0] + " 보다 큰 값들은 " + resultList);
 
+            cal.deleteResult();
             position = 0;
         }
     }

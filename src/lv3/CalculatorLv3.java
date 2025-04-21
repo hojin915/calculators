@@ -7,7 +7,8 @@ import java.util.List;
 public class CalculatorLv3 {
     private List<Number> result = new ArrayList<>();
     private int index = 0;
-    public enum Operator {
+    private int resultCount = 100;
+    private enum Operator {
         ADD("+"), SUBTRACT("-"), MULTIPLY("*"), DIVIDE("/");
 
         private final String symbol;
@@ -44,37 +45,63 @@ public class CalculatorLv3 {
         Number ret;
         switch (Operator.getOperator(op)) {
             case ADD:
-                if (first instanceof Integer && second instanceof Integer) {
-                    ret = first.intValue() + second.intValue();
-                    result.add((Integer) ret);
-                } else {
-                    ret = first.doubleValue() + second.doubleValue();
-                    result.add((Double) ret);
-                }
-                this.index++;
+                ret = calAdd(first, second);
                 return ret;
             case SUBTRACT:
-                if (first instanceof Integer && second instanceof Integer) {
-                    ret = first.intValue() - second.intValue();
-                    result.add(ret.intValue());
-                } else {
-                    ret = first.doubleValue() - second.doubleValue();
-                    result.add(ret.doubleValue());
-                }
-                this.index++;
+                ret = calSubtract(first, second);
                 return ret;
             case MULTIPLY:
-                if (first instanceof Integer && second instanceof Integer) {
-                    ret = first.intValue() * second.intValue();
-                    result.add(ret.intValue());
-                } else {
-                    ret = first.doubleValue() * second.doubleValue();
-                    result.add(ret.doubleValue());
-                }
-                this.index++;
+                ret = calMultiply(first, second);
                 return ret;
             case DIVIDE:
-                /* 0으로 나누면 예외처리
+                calDivide(first, second);
+            default:
+                return 0;
+        }
+    }
+
+    private Number calAdd(Number first, Number second) {
+        Number ret;
+        if (first instanceof Integer && second instanceof Integer) {
+            ret = first.intValue() + second.intValue();
+            result.add((Integer) ret);
+        } else {
+            ret = first.doubleValue() + second.doubleValue();
+            result.add((Double) ret);
+        }
+        this.index++;
+        return ret;
+    }
+
+    private Number calSubtract(Number first, Number second) {
+        Number ret;
+        if (first instanceof Integer && second instanceof Integer) {
+            ret = first.intValue() - second.intValue();
+            result.add(ret.intValue());
+        } else {
+            ret = first.doubleValue() - second.doubleValue();
+            result.add(ret.doubleValue());
+        }
+        this.index++;
+        return ret;
+    }
+
+    private Number calMultiply(Number first, Number second) {
+        Number ret;
+        if (first instanceof Integer && second instanceof Integer) {
+            ret = first.intValue() * second.intValue();
+            result.add(ret.intValue());
+        } else {
+            ret = first.doubleValue() * second.doubleValue();
+            result.add(ret.doubleValue());
+        }
+        this.index++;
+        return ret;
+    }
+
+    private Number calDivide(Number first, Number second) {
+        Number ret;
+        /* 0으로 나누면 예외처리
                 if (second.intValue() == 0) {
                     throw new ArithmeticException();
                 }
@@ -82,30 +109,33 @@ public class CalculatorLv3 {
                 result.add(ret.doubleValue());
                 this.index++;
                 return ret;*/
-                // 예외처리 없이 코드 진행
-                if (first instanceof Integer && second instanceof Integer) {
-                    try{
-                        ret = first.intValue() / second.intValue();
-                        result.add(ret.doubleValue());
-                        this.index++;
-                        return ret;
-                    } catch (ArithmeticException e) {
-                        System.out.println("divided by zero");
-                        return null;
-                    }
-                }
-                // Double이 들어간 나눗셈에서 0으로 나누면 exception 대신
-                // Infinity, Nan이 결과로 나오기 때문에 따로 처리
-                else {
-                    ret = first.doubleValue() / second.doubleValue();
-                    if(Double.isInfinite(ret.doubleValue()) || Double.isNaN(ret.doubleValue())) {
-                        System.out.println("divided by zero");
-                        return null;
-                    }
-                }
-            default:
-                return 0;
+        // 예외처리 없이 코드 진행
+        if (first instanceof Integer && second instanceof Integer) {
+            try{
+                ret = first.intValue() / second.intValue();
+                result.add(ret.doubleValue());
+                this.index++;
+                return ret;
+            } catch (ArithmeticException e) {
+                System.out.println("divided by zero(Integer)");
+                return null;
+            }
         }
+        // Double이 들어간 나눗셈에서 0으로 나누면 exception 대신
+        // Infinity, Nan이 결과로 나오기 때문에 따로 처리
+        else {
+            ret = first.doubleValue() / second.doubleValue();
+            if(Double.isInfinite(ret.doubleValue()) || Double.isNaN(ret.doubleValue())) {
+                System.out.println("divided by zero(Double)");
+                return null;
+            }
+            return ret;
+        }
+    }
+
+    // 개수는 main에서도 수정 가능
+    public void setResultCount(int resultCount) {
+        this.resultCount = resultCount;
     }
 
     // 가장 최근의 결과값 리턴
@@ -114,8 +144,9 @@ public class CalculatorLv3 {
     }
 
     // 가장 오래된 결과값 제거
+    // result.size() 로 최대 개수 정하기
     public void deleteResult() {
-        if (result.isEmpty()) {
+        if (result.size() < resultCount) {
             System.out.println("Result is empty");
         } else {
             result.remove(0);
