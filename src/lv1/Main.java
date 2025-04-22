@@ -9,6 +9,7 @@ public class Main {
         int a = 0;
         int b = 0;
         Scanner sc = new Scanner(System.in);
+        CalculatorLv1 cal = new CalculatorLv1();
         while (true) {
             int result = 0;
             if (position == 0) {
@@ -18,6 +19,7 @@ public class Main {
                     break;
                 try {
                     a = Integer.parseInt(first);
+                    cal.setFirst(a);
                     position = 1;
                 } catch (NumberFormatException e) {
                     System.out.println("양의 정수를 입력해 주세요");
@@ -35,12 +37,7 @@ public class Main {
                     break;
                 try {
                     b = Integer.parseInt(second);
-                    if(op == '/'){
-                        result = a / b;
-                        System.out.println("result = " + result);
-                        position = 0;
-                        continue;
-                    }
+                    cal.setSecond(b);
                     position = 2;
                 } catch (NumberFormatException e) {
                     System.out.println("양의 정수를 입력해 주세요");
@@ -56,11 +53,15 @@ public class Main {
                 String temp = sc.nextLine();
                 if(temp.equals("exit"))
                     break;
-                op = temp.charAt(0);
                 if (temp.length() != 1) {
                     System.out.println("+, -, *, / 중 하나를 입력해 주세요");
                     continue;
                 }
+                op = temp.charAt(0);
+                cal.setOp(op);
+                result = cal.calculate();
+
+                /*
                 switch (op) {
                     case '+':
                         result = a + b;
@@ -75,9 +76,8 @@ public class Main {
                         try{
                             result = a / b;
                         } catch (ArithmeticException e){
-                            System.out.println("0으로 나누는 것은 불가능합니다");
-                            System.out.println("두번째 수를 다시 입력해주세요");
-                            position = 1;
+                            System.out.println("0으로는 나눌 수 없습니다");
+                            position = 0;
                             continue;
                         }
                         break;
@@ -85,6 +85,7 @@ public class Main {
                         System.out.println("+, -, *, / 중 하나를 입력해 주세요");
                         continue;
                 }
+                */
             }
             System.out.println("result = " + result);
             position = 0;
